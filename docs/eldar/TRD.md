@@ -8,25 +8,27 @@
 
 ## 1. System Overview
 
-Eldar is a multi-tenant SaaS application deployed on AWS. The backend is a FastAPI modular monolith on Lambda. The frontend is a Next.js 14 application on Amplify. Long-running pipeline stages (document generation, form automation) run as async Lambda workers triggered via SQS.
+Eldar is a multi-tenant SaaS application deployed on AWS. The backend is a FastAPI modular monolith on Lambda. The frontend is a Next.js 14 application on Amplify. Long-running pipeline stages run as async workers orchestrated by Step Functions Express. Form submission runs on ECS Fargate Spot (zero cold starts). Real-time updates delivered via SSE.
 
 ```
-                    ┌──────────────────────────────────────────┐
-                    │           AWS Infrastructure              │
-  User Browser      │                                          │
-       │            │  CloudFront + Amplify                    │
-       ├────HTTPS──▶│  Next.js 14 (SSR + Static)              │
-       │            │                                          │
-       ├────API────▶│  API Gateway → FastAPI Lambda            │
-       │            │        │                                  │
-       │            │        ├── DynamoDB (data)               │
-       │            │        ├── S3 (PDFs, docs)               │
-       │            │        ├── Cognito (auth)                │
-       │            │        ├── Secrets Manager               │
-       │            │        └── SQS → Worker Lambdas ──▶ Bedrock (Claude)
-       │            │                              └──▶ Puppeteer (PDF)
-       │            │                              └──▶ Playwright (forms)
-       └────────────└──────────────────────────────────────────┘
+                    ┌──────────────────────────────────────────────────────┐
+                    │                 AWS Infrastructure                    │
+  User Browser      │                                                      │
+       │            │  CloudFront + Amplify                                │
+       ├────HTTPS──▶│  Next.js 14 (SSR + SSE EventSource)                 │
+       │            │                                                      │
+       ├────API────▶│  API Gateway (HTTP) → FastAPI Lambda                 │
+       │            │        │                                              │
+       │            │        ├── DynamoDB (data)                           │
+       │            │        ├── S3 (PDFs, docs)                           │
+       │            │        ├── Cognito (auth, custom UI)                 │
+       │            │        ├── Secrets Manager                           │
+       │            │        └── Step Functions Express                    │
+       │            │               ├── Lambda: scrape / evaluate / gen    │
+       │            │               │     └──▶ Bedrock ILLMClient (Claude) │
+       │            │               │     └──▶ Puppeteer Lambda (PDF)      │
+       │            │               └── ECS Fargate Spot: Playwright       │
+       └────────────└──────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -52,15 +54,17 @@ Eldar is a multi-tenant SaaS application deployed on AWS. The backend is a FastA
 
 ### Infrastructure
 - **IaC:** AWS CDK v2 (TypeScript)
+- **Dev iteration:** `cdk watch` for Lambda hot-deploy (~15s loop). Next.js local dev for frontend. SAM CLI for local Lambda invocation.
 - **CI/CD:** GitHub Actions (4-workflow pattern: frontend-ci, backend-ci, infra-ci, deploy)
 - **Secrets:** AWS Secrets Manager (no env vars for secrets)
 - **Monitoring:** Datadog (dashboards, alerting, MTTR baselines)
 - **Tracing:** AWS X-Ray
 
 ### AI
-- **Provider:** Anthropic Claude via AWS Bedrock
+- **Provider:** Anthropic Claude via AWS Bedrock (Phase 1 — covered by AWS credits)
+- **Abstraction:** `ILLMClient` interface with `BedrockClaudeClient` (active) and `AnthropicDirectClient` (ready). Switch is a one-file change when credits exhaust or model lag becomes a competitive issue.
 - **Model:** claude-sonnet-4-6 (document generation), claude-haiku-4-5 (fit scoring, lighter tasks)
-- **Prompt caching:** Enabled for profile context (reduces cost on repeat calls)
+- **Prompt caching:** Enabled for profile context (reduces cost ~70% on repeat calls)
 
 ### Document Generation
 - **Renderer:** Puppeteer (headless Chromium) in a Lambda container image
@@ -70,9 +74,22 @@ Eldar is a multi-tenant SaaS application deployed on AWS. The backend is a FastA
 
 ### Form Automation
 - **Tool:** Playwright (Python)
-- **Deployment:** Lambda container image (Playwright + Chromium bundled)
+- **Deployment:** ECS Fargate Spot (persistent container, zero cold starts). Capacity provider strategy: Spot preferred, on-demand fallback. Target: 0.25 vCPU / 0.5GB per task.
 - **ATS adapters:** One file per ATS (greenhouse.py, lever.py, ashby.py), each implementing `IATSAdapter`
-- **CAPTCHA:** Pipeline pauses, stores filled-form state, notifies user via email + WebSocket push, waits for human to complete and submit
+- **CAPTCHA:** Step Functions execution pauses via callback token. User notified via email + SSE push. User opens pre-filled form, solves CAPTCHA, submits. Webhook triggers callback token return, execution resumes.
+
+### Pipeline Orchestration
+- **Tool:** AWS Step Functions Express Workflows
+- **Cost:** $0.00001/state transition — ~$0.16/month at 2,000 runs
+- **Human gates:** Callback token pattern (`.waitForTaskToken`). Execution pauses on approval gates and CAPTCHA checkpoint.
+- **Retry:** Each state configures `Retry` with exponential backoff (3 attempts, 2× multiplier, 30s max interval)
+- **Failure handling:** `Catch` on each state routes to a FAILED terminal state with error context. DLQ catches Step Functions execution failures.
+
+### Real-time Updates
+- **Protocol:** Server-Sent Events (SSE) via API Gateway HTTP API
+- **Endpoint:** `GET /pipeline/{application_id}/stream` — returns `text/event-stream`
+- **Flow:** Step Functions state change → EventBridge rule → Lambda → pushes SSE event to open client connection
+- **Client:** Browser `EventSource` API — auto-reconnects, no library required
 
 ---
 
@@ -265,19 +282,21 @@ class CVTemplateData:
 
 ## 11. Cost Estimates (at 100 Pro subscribers, 20 runs/month each = 2,000 runs/month)
 
-| Service | Estimate/month |
-|---------|---------------|
-| Lambda (API + workers) | ~$15 |
-| DynamoDB | ~$8 |
-| S3 (PDFs + storage) | ~$5 |
-| Bedrock (Claude) | ~$400 (avg $0.20/run) |
-| SQS | ~$2 |
-| CloudFront + Amplify | ~$20 |
-| Cognito | ~$5 |
-| Datadog | ~$35 |
-| **Total infra** | **~$490/month** |
-| **Revenue (100 × $79)** | **$7,900/month** |
-| **Gross margin** | **~94%** |
+| Service | Estimate/month | AWS Credits? |
+|---------|---------------|-------------|
+| Lambda (API + workers) | ~$15 | ✅ Yes |
+| DynamoDB | ~$8 | ✅ Yes |
+| S3 (PDFs + storage) | ~$5 | ✅ Yes |
+| Bedrock (Claude) | ~$400 (avg $0.20/run) | ✅ Yes |
+| Step Functions Express | ~$0.16 | ✅ Yes |
+| ECS Fargate Spot (Playwright) | ~$3 | ✅ Yes |
+| CloudFront + Amplify | ~$20 | ✅ Yes |
+| Cognito | $0 (free up to 50k MAU) | ✅ Yes |
+| Datadog | ~$35 | ❌ No |
+| **Total infra** | **~$486/month** | |
+| **Revenue (100 × $79)** | **$7,900/month** | |
+| **Gross margin** | **~94%** | |
+| **With AWS credits** | **Bedrock + all AWS = ~$54/month net** | |
 
 Target: keep total infra cost below 8% of MRR at all subscriber levels.
 

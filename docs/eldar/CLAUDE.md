@@ -24,21 +24,22 @@ eldar/
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | FastAPI (Python 3.12), Pydantic, boto3 |
-| Frontend | Next.js 14, TypeScript, Tailwind CSS, shadcn/ui |
-| Infrastructure | AWS CDK (TypeScript) |
-| Database | DynamoDB |
-| Storage | S3 |
-| Auth | AWS Cognito |
-| AI | Anthropic Claude via AWS Bedrock |
-| PDF | Puppeteer (headless Chrome on Lambda) |
-| Form automation | Playwright |
-| Queue | SQS |
-| Payments | Stripe |
-| CI/CD | GitHub Actions |
-| Monitoring | Datadog |
+| Layer | Technology | Decision rationale |
+|-------|-----------|-------------------|
+| Backend | FastAPI (Python 3.12), Pydantic, boto3 | Proven stack, async, type-safe |
+| Frontend | Next.js 14, TypeScript, Tailwind CSS, shadcn/ui | SSR, streaming, App Router |
+| Infrastructure | AWS CDK v2 (TypeScript) + `cdk watch` for dev iteration | AWS-native, credits apply, 15s hot deploys via watch mode |
+| Database | DynamoDB | Serverless, credits apply, known access patterns |
+| Storage | S3 | PDFs, profile docs |
+| Auth | AWS Cognito + custom-built UI components | Free under credits, custom UI avoids hosted-UI UX issues |
+| AI | Anthropic Claude via AWS Bedrock, abstracted behind `ILLMClient` | Credits apply now; swap to direct Anthropic API post-credits via one-file change |
+| PDF | Puppeteer (headless Chrome on Lambda container) | Full CSS support, no LaTeX dependency |
+| Form automation | Playwright on **ECS Fargate Spot** | Zero cold starts on the most reliability-critical step; ~$3/mo at idle |
+| Pipeline orchestration | **AWS Step Functions Express Workflows** | Visual debugger, built-in retry/catch per stage, $0.00001/transition |
+| Real-time updates | **Server-Sent Events (SSE)** via API Gateway HTTP API | One-directional updates don't need bidirectional WebSocket protocol; simpler, cheaper |
+| Payments | Stripe | Already integrated in MyIQ |
+| CI/CD | GitHub Actions (4-workflow pattern) | Proven pattern |
+| Monitoring | Datadog | Dashboards, alerting, MTTR |
 
 ---
 
@@ -117,7 +118,7 @@ Job evaluation and application tracking are **always free**. A run is consumed w
 |-------|---------|
 | `AuthStack` | Cognito User Pool, Identity Pool |
 | `StorageStack` | DynamoDB tables, S3 buckets |
-| `ApiStack` | FastAPI Lambda, API Gateway, SQS, Worker Lambdas, Bedrock, Secrets Manager |
+| `ApiStack` | FastAPI Lambda, API Gateway, Step Functions, Worker Lambdas, ECS Fargate Spot cluster, Bedrock, Secrets Manager |
 | `FrontendStack` | Next.js on Amplify, CloudFront |
 
 ---

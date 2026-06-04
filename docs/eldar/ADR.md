@@ -208,3 +208,190 @@ Eldar uses Claude for job evaluation (fit scoring) and document generation (CV +
 - New Claude model versions (e.g., next Sonnet release) available on Bedrock 1–4 weeks after Anthropic direct
 - Bedrock pricing has slight overhead vs direct API — offset by prompt caching savings
 - If Bedrock support for a critical Claude feature lags, can switch to direct API per-module without system-wide change
+- **ILLMClient abstraction (see ADR-012) makes this switch a one-file change**
+
+---
+
+## ADR-008: Step Functions Express over Raw SQS for Pipeline Orchestration
+
+**Date:** 2026-06-04
+**Status:** Accepted
+
+### Context
+The Eldar pipeline has 6 sequential stages with human approval gates (fit evaluation, document review, CAPTCHA). Each stage runs asynchronously. We need an orchestration mechanism that handles retries, failures, and pause/resume at human checkpoints.
+
+### Options Considered
+**A — Raw SQS queues:** Each stage publishes to the next queue. Pipeline state tracked manually in DynamoDB.
+**B — Step Functions Express Workflows:** Managed state machine. Each stage is a state. Human gates use the callback token pattern (task heartbeat).
+**C — Step Functions Standard Workflows:** Similar to Express but $0.025/state transition vs $0.00001 — 2500× more expensive for high-volume orchestration.
+
+### Decision
+**B — Step Functions Express Workflows.**
+
+### Rationale
+- Pipeline state is inherent to a state machine — modelling it as DynamoDB records adds accidental complexity
+- Callback token pattern handles human approval gates natively (pause execution, resume on token return)
+- Visual debugger in AWS Console shows each execution's path — critical for diagnosing "why did this user's submission fail at 2am"
+- Built-in retry with exponential backoff per state — eliminates hand-rolled retry logic in each worker
+- Cost: $0.00001/transition × 8 transitions × 2,000 runs/month = **$0.16/month** — negligible
+- Covered by AWS credits
+
+### Consequences
+- Step Functions Express has a 5-minute maximum execution duration — sufficient for pipeline (target p95 < 3 min). Upgrade to Standard if pipeline ever exceeds this.
+- Each execution generates CloudWatch logs — minor log storage cost
+- Human approval gates require callback tokens to be stored and retrieved — handled by the submissions module
+
+---
+
+## ADR-009: ECS Fargate Spot for Playwright Submission Worker
+
+**Date:** 2026-06-04
+**Status:** Accepted
+
+### Context
+The form submission worker runs Playwright (headless Chromium) to fill ATS application forms. This is the most reliability-critical step in the pipeline — a failure here means the application was not submitted. Deployment options are Lambda (container image) or ECS Fargate.
+
+### Options Considered
+**A — Lambda container image:** Playwright + Chromium bundled (~400MB). Cold starts of 8–15s. Max 15-minute timeout.
+**B — ECS Fargate on-demand:** Persistent container, zero cold starts. ~$0.04/vCPU-hour.
+**C — ECS Fargate Spot:** Same as on-demand but ~70% cheaper via Spot pricing. ~$0.013/vCPU-hour. Can be interrupted (rare for short tasks).
+
+### Decision
+**C — ECS Fargate Spot with on-demand fallback via capacity provider strategy.**
+
+### Rationale
+- Cold starts on Lambda cause 8–15s delays at the moment the user is waiting for their form to be filled — worst possible UX moment
+- Fargate containers stay warm between runs — zero cold start
+- Spot interruption risk is low for tasks under 2 minutes (form fill target: 60s)
+- Capacity provider strategy: Fargate Spot preferred, fall back to Fargate on-demand if Spot unavailable — zero reliability loss
+- Fargate Spot with 0.25 vCPU + 0.5GB at ~1 warm container: **~$2–3/month** covered by AWS credits
+- Scale to 0 when no active submissions — near-zero cost at low volume
+
+### Consequences
+- ECS cluster adds complexity to CDK stack vs a Lambda function
+- Container image must include Playwright + Chromium — same image used in Lambda approach, no change
+- Spot can be interrupted mid-task — Step Functions will retry the filling stage automatically (ATS forms are idempotent — filling again is safe)
+
+---
+
+## ADR-010: Server-Sent Events over WebSocket for Real-time Pipeline Updates
+
+**Date:** 2026-06-04
+**Status:** Accepted
+
+### Context
+Users need live status updates as the pipeline progresses through stages (scraping → evaluating → generating → filling → awaiting CAPTCHA). Updates flow server → client only.
+
+### Options Considered
+**A — API Gateway WebSocket API:** Bidirectional. Requires connect/disconnect/default route management. $0.00025/connection-hour.
+**B — Server-Sent Events (SSE) via HTTP API Gateway:** One-directional. Uses browser's native `EventSource` API. Standard HTTP streaming.
+**C — Polling:** Client polls `/applications/:id/status` every 2s. Simple but wasteful and adds latency to status display.
+
+### Decision
+**B — Server-Sent Events.**
+
+### Rationale
+- Pipeline updates are server → client only — bidirectional WebSocket protocol is unnecessary complexity
+- `EventSource` is native to all modern browsers — no client library required
+- Auto-reconnects on disconnect without application code
+- Standard HTTP — works through proxies, load balancers, and API Gateway HTTP API without special configuration
+- Connection cost is negligible vs WebSocket hourly charges
+- Simpler to implement, test, and debug than WebSocket connection lifecycle management
+
+### Consequences
+- SSE connections are long-lived HTTP responses — Lambda timeout (30s for API functions) requires periodic heartbeat or chunked streaming pattern. Use a dedicated SSE Lambda with longer timeout (300s) or deliver events via DynamoDB Streams → Lambda → SSE push.
+- One browser tab = one SSE connection per active pipeline — acceptable at MVP scale
+
+---
+
+## ADR-011: Cognito with Custom UI over Hosted Cognito UI or Clerk
+
+**Date:** 2026-06-04
+**Status:** Accepted
+
+### Context
+Eldar needs user authentication. Options evaluated: hosted Cognito UI, Cognito with custom frontend components, or Clerk (third-party auth service).
+
+### Options Considered
+**A — Hosted Cognito UI:** AWS-managed, minimal setup. But severely limited customisation — looks generic and dated out of the box.
+**B — Clerk:** Best-in-class auth UX, pre-built Next.js components, social login. $25/month minimum, not covered by AWS credits.
+**C — Cognito + custom UI (Amplify Auth + Next.js components):** AWS-native backend, fully custom frontend. Free under AWS credits. Full UX control.
+
+### Decision
+**C — Cognito with custom-built UI components.**
+
+### Rationale
+- Cognito is free up to 50,000 MAU under AWS free tier, and covered by AWS credits — $0 cost at MVP
+- Clerk costs $25/month ($300/year) from day one regardless of user count — real cost when pre-revenue
+- Hosting auth on a third-party service (Clerk) introduces a critical-path dependency; a Clerk outage means users cannot log in
+- Cognito + Amplify Auth SDK + custom Next.js sign-in/sign-up components delivers professional UX with ~2 days frontend work vs 30 minutes for Clerk — acceptable tradeoff at MVP
+- Both Cognito and Clerk have 99.9% SLA — reliability is equivalent
+
+### Consequences
+- 2 extra days of frontend work for custom auth UI vs Clerk
+- Custom UI must handle all edge cases (password reset, email verification, MFA) — manageable with Amplify Auth SDK
+- If user growth exceeds 50,000 MAU, Cognito at $0.0055/MAU is still cheaper than Clerk's per-MAU pricing
+
+---
+
+## ADR-012: ILLMClient Abstraction for AI Provider Portability
+
+**Date:** 2026-06-04
+**Status:** Accepted
+
+### Context
+Eldar uses Anthropic Claude for job evaluation and document generation. Two access paths exist: AWS Bedrock (credits apply, 1–4 week model lag) and direct Anthropic API (no credits, immediate model access). The optimal choice may change over time as credits are consumed and new models release.
+
+### Decision
+Abstract Claude access behind an `ILLMClient` interface. Use Bedrock today. Switch to direct API when AWS credits are exhausted or model lag becomes a competitive issue — requiring a change to one file, not eight modules.
+
+```python
+class ILLMClient(ABC):
+    @abstractmethod
+    async def generate(self, messages: list[Message], system: str, model: LLMModel) -> LLMResponse: ...
+
+    @abstractmethod
+    async def generate_structured(self, messages: list[Message], schema: type[T]) -> T: ...
+
+class BedrockClaudeClient(ILLMClient): ...   # Active now
+class AnthropicDirectClient(ILLMClient): ...  # Ready to switch
+```
+
+### Rationale
+- AWS credits offset ~$400/month in Claude API costs during the MVP phase — Bedrock is effectively free
+- When credits are exhausted, direct Anthropic API enables access to the latest models immediately on release
+- The abstraction costs one interface file and one concrete class per provider — zero ongoing maintenance overhead
+- SOLID Liskov Substitution: both clients are interchangeable; callers never know which is active
+
+### Consequences
+- The `ILLMClient` interface must be stable — adding methods requires updating both concrete classes
+- Model enum (`LLMModel`) must map to correct model IDs per provider (e.g., `claude-sonnet-4-6` has different IDs on Bedrock vs Anthropic direct)
+
+---
+
+## ADR-013: CDK Watch over SST for Development Iteration Speed
+
+**Date:** 2026-06-04
+**Status:** Accepted
+
+### Context
+Lambda development iteration speed is a known pain point — full `cdk deploy` takes 2+ minutes. SST (Serverless Stack Toolkit) was evaluated as a faster alternative.
+
+### Options Considered
+**A — SST v3 (Ion):** Fast Lambda hot reload (~100ms). But SST v3 moved from CDK to Pulumi/OpenTofu — a fundamentally different IaC paradigm. Ben's CDK expertise does not transfer. SST Inc is a startup — vendor risk for a mission-critical build tool.
+**B — SST v2:** Built on CDK, familiar constructs. But v2 is in maintenance mode — no new features, security patches only.
+**C — `cdk watch` (built-in CDK v2):** Monitors source files, triggers incremental deployments (~15s for Lambda code changes). Zero new tools, zero new vendor, full CDK compatibility.
+
+### Decision
+**C — `cdk watch` for development, standard `cdk deploy` for production.**
+
+### Rationale
+- `cdk watch` is part of CDK v2 — already installed, no new dependency
+- 15s iteration loop is a significant improvement over 2-min full deploy, sufficient for productive Lambda development
+- SST v3's paradigm shift (CDK → Pulumi) means re-learning IaC primitives with no credit for existing CDK knowledge
+- Vendor dependency on SST Inc for a mission-critical build tool is not justified when a built-in alternative exists
+- AWS credits cover all CDK-managed resources regardless of whether SST is used
+
+### Consequences
+- `cdk watch` is ~15s vs SST's ~100ms — meaningful difference for rapid UI iteration; mitigated by Next.js local dev (Amplify mock) for frontend work
+- Local Lambda invocation still requires `aws lambda invoke` or SAM CLI for unit testing Lambda logic locally
