@@ -1,8 +1,7 @@
-%% Example CV - [YOUR_NAME]
+%% Benjamin Nwokoye — Master CV
 %% Comprehensive overview of all competencies, experience, and achievements.
 %% Use as a master reference when tailoring role-specific CVs.
 %%
-%% SETUP: Run /setup to populate this with your actual information.
 %% Compile with: lualatex main_example.tex
 %% (pdflatex often fails on modern MiKTeX with fontawesome5 font-expansion errors.)
 
@@ -24,18 +23,19 @@
     linkcolor=blue,
     filecolor=magenta,
     urlcolor=blue,
-    pdftitle={[YOUR_NAME] - CV},
+    pdftitle={Benjamin Nwokoye - CV},
     pdfpagemode=FullScreen,
 }
 \usepackage[scale=0.80]{geometry}
 \usepackage{import}
+\usepackage{needspace}
 
 % personal data
-\name{[First]}{[Last]}
-\address{[Your Address, City, Country]}{}{}
-\phone[mobile]{[+XX XXXXXXXXXX]}
-\email{[your.email@example.com]}
-\extrainfo{\href{[https://linkedin.com/in/your-profile]}{LinkedIn}, \href{[https://github.com/your-username]}{GitHub}}
+\name{Benjamin}{Nwokoye}
+\address{New Jersey, USA}{}{}
+\phone[mobile]{+1 (416) 871-0223}
+\email{ben.nwokoye@gmail.com}
+\extrainfo{\href{https://www.linkedin.com/in/benjamin-nwokoye/}{LinkedIn} | \href{https://github.com/benzinoh}{GitHub} | \href{https://bennwokoye.com}{bennwokoye.com}}
 
 \begin{document}
 
@@ -46,7 +46,25 @@
 % ============================================================
 
 \vspace{6pt}
-\small{[Write a 3-5 line profile statement tailored to the role you're applying for. Focus on what makes you uniquely qualified. Example: "Data scientist with a PhD in [field] and X years of industry experience. Combines deep domain expertise in [domain] with strong applied machine learning and Python development skills. Experienced in developing end-to-end ML pipelines, from data ingestion to stakeholder-facing dashboards."]}
+\small{AI systems builder and enterprise cloud architect with 13+ years shipping production-grade infrastructure, LLM applications, and agentic workflows at scale. Sole engineer on \href{https://app.bennwokoye.com}{MyIQ}, a live GenAI SaaS on AWS built with FastAPI, React, AWS CDK (4 stacks), Bedrock (Claude / Claude Code), and 118 passing tests, demonstrating full-cycle AI agent design, prompt engineering, and production deployment. Deep background in enterprise systems integration, API architecture, and cloud reliability (CI/CD, IaC, observability), combined with a track record as a trusted technical advisor to C-suite stakeholders who can translate ambiguous customer requirements into structured, production-ready AI solutions.}
+
+% ============================================================
+%     LIVE AI AGENT PROJECT
+% ============================================================
+
+\section{Live AI Agent Project}
+\vspace{1pt}
+\begin{itemize}
+
+\item{\cventry{}{Production, enterprise-grade GenAI Agent}{\href{https://app.bennwokoye.com}{app.bennwokoye.com}}{Sole Engineer}{}{\vspace{1pt}
+\begin{itemize}
+    \item Designed and shipped a full-stack serverless LLM application on AWS: FastAPI (Python 3.12) on Lambda, React 18 + TypeScript on Amplify, AWS CDK across 4 stacks (AuthStack / StorageStack / ApiStack / FrontendStack), Cognito auth, DynamoDB, Bedrock (Claude / Claude Code), Stripe webhooks, and Secrets Manager.
+    \item Architected the AI agent pipeline end-to-end: prompt engineering with chain-of-thought and structured output patterns, LLM behaviour optimization, response validation, and guardrails.
+    \item Built 4 GitHub Actions CI/CD workflows (frontend-ci, backend-ci, infra-ci, deploy) with CDK synth/diff gating on infra PRs, reusable workflow patterns, and multi-job deploy sequencing; 118 tests passing (pytest + moto + Vitest) and Checkov IaC security scanning.
+    \item Designed the freemium monetization model, integrated Stripe webhooks for subscription lifecycle management, and built usage-gated enforcement logic.
+\end{itemize}}}
+
+\end{itemize}
 
 % ============================================================
 %     CORE COMPETENCIES
@@ -56,15 +74,17 @@
 \vspace{1pt}
 \begin{itemize}
 
-\item \textbf{[Skill Category 1]}: [Specific skills, frameworks, tools. Be concrete.]
+\item \textbf{AI / LLM:} AWS Bedrock (Claude / Claude Code), prompt engineering (CoT, few-shot, structured output), agentic pipeline design, LLM behaviour optimization, guardrails, GenAI SaaS architecture, Strands Agents, MLOps fundamentals
 
-\item \textbf{[Skill Category 2]}: [Specific skills, frameworks, tools.]
+\item \textbf{Cloud \& IaC:} AWS (Lambda, API Gateway, Cognito, DynamoDB, Amplify, Bedrock, Secrets Manager, CloudWatch, S3, EC2, EKS, RDS, Route 53), AWS CDK (TypeScript), Terraform, AWS Control Tower, Microsoft Azure
 
-\item \textbf{[Skill Category 3]}: [Specific skills, frameworks, tools.]
+\item \textbf{CI/CD \& DevOps:} GitHub Actions (4-workflow pipeline design, reusable workflows, CDK synth/diff gating), Azure DevOps, Snyk, SonarQube, Checkov, multi-job deploy sequencing
 
-\item \textbf{[Skill Category 4]}: [Domain expertise, methods, approaches.]
+\item \textbf{Languages:} Python (FastAPI, Pydantic, boto3, pytest, moto), TypeScript (CDK, React 18), SQL, Bash
 
-\item \textbf{[Skill Category 5]}: [Tools, platforms, software.]
+\item \textbf{Observability \& Security:} Datadog (dashboards, alerting, MTTR baselines), CloudWatch, SLO definition, incident response runbooks, IAM, RBAC, SSO lifecycle, SOC 2 / PCI / ISO / GDPR, zero-trust design, Responsible AI
+
+\item \textbf{Program Management:} PMP, CBAP, CSM, Agile/Scrum, Kanban, Jira, Confluence, risk registers, RFC/POR/decision docs, executive reporting
 
 \end{itemize}
 
@@ -76,84 +96,71 @@
 \vspace{3pt}
 \begin{itemize}
 
-% --- Most Recent Role ---
-\item{\cventry{[YYYY--Present]}{[Job Title]}{[Company]}{[City, Country]}{}{\vspace{1pt}
+\needspace{5\baselineskip}
+\item{\cventry{11/2024--05/2026}{Senior Technical Program Manager (AI Platform \& Cloud Infrastructure)}{WIS International}{Toronto, Canada}{}{\vspace{1pt}
 \begin{itemize}
-    \item [Achievement or responsibility 1 - be specific, use numbers where possible]
-    \item [Achievement or responsibility 2]
-    \item [Achievement or responsibility 3]
-    \item [Achievement or responsibility 4]
+    \item Built the SRE function from scratch: designed on-call rotation structure, SEV classification framework (SEV 1--4), incident management SOPs, and post-mortem process; drove MTTR down by 50\% across AWS and Azure production environments.
+    \item Designed and deployed AI-assisted CI/CD pipelines using GitHub Actions and GitHub Copilot AI; established guardrails, branch protection, and feedback loops that cut release cycle time by 60\%.
+    \item Rolled out Datadog observability stack across multi-cloud environments: instrumented services with dashboards, alerting, and SLO tracking; operationalized Snyk and SonarQube vulnerability scanning inside CI/CD.
+    \item Directed IAM, RBAC, and SSO lifecycle governance across multi-account cloud environments; aligned Engineering and Governance stakeholders on audit readiness for SOC 2, ISO, and GDPR compliance.
+    \item Delivered 40\% infrastructure cost reduction through right-sizing, auto-scaling policy enforcement, and removal of idle resources across AWS and Azure.
+    \item Embedded partner to the CTO: translated infrastructure complexity into executive-level decision frameworks; coordinated competing priorities across infrastructure, security, and product teams.
 \end{itemize}}}
 
 \vspace{3pt}
 
-% --- Previous Role ---
-\item{\cventry{[YYYY--YYYY]}{[Job Title]}{[Company]}{[City, Country]}{}{\vspace{1pt}
+\needspace{5\baselineskip}
+\item{\cventry{05/2023--11/2024}{Senior Project Manager (AWS Cloud Platform Programs)}{Caylent (AWS Premier Tier Partner)}{Ontario, Canada}{}{\vspace{1pt}
 \begin{itemize}
-    \item [Achievement or responsibility 1]
-    \item [Achievement or responsibility 2]
-    \item [Achievement or responsibility 3]
+    \item Primary technical advisor to enterprise customers across complex AWS platform engagements; achieved 98\% on-time delivery and $<$2\% budget variance across a multi-client portfolio.
+    \item Directed 17+ VM workload migrations, EKS implementations, and GitHub CI/CD pipeline design; implemented AI-assisted automation that cut CI/CD cycle time by 60\% across customer environments.
+    \item Established program governance, risk registers, and escalation frameworks that improved delivery quality and compliance adherence by 67\%.
 \end{itemize}}}
 
 \vspace{3pt}
 
-% --- Earlier Role ---
-\item{\cventry{[YYYY--YYYY]}{[Job Title]}{[Company]}{[City, Country]}{}{\vspace{1pt}
+\needspace{5\baselineskip}
+\item{\cventry{01/2022--05/2023}{IT Project Manager (Cloud Infrastructure)}{Kubra Data Transfer}{Mississauga, Canada}{}{\vspace{1pt}
 \begin{itemize}
-    \item [Achievement or responsibility 1]
-    \item [Achievement or responsibility 2]
+    \item Led AWS legacy migration (EC2, RDS, S3, Lambda) under Well-Architected guidance, delivering 45\% infrastructure cost reduction; drove Terraform module standardization, cutting IaC configuration drift by 75\%.
+    \item Coordinated globally distributed engineering teams across concurrent programs --- 97\% risk mitigation success rate, average 8-week delivery cycles.
+\end{itemize}}}
+
+\vspace{3pt}
+
+\needspace{5\baselineskip}
+\item{\cventry{2012--2021}{Software Engineer $\rightarrow$ Principal Program Manager}{Standards Organisation of Nigeria (SON)}{Lagos, Nigeria}{}{\vspace{1pt}
+\begin{itemize}
+    \item Led end-to-end design and digitization of the SONCAP conformity certification platform and its integration with the national trade portal (trade.gov.ng); 20,000+ daily transactions across enterprise backend systems, regulatory databases, and government APIs.
+    \item Architected cross-agency data exchange systems, document management workflows, and national-scale security and digital policy frameworks.
+    \item ISO 9001:2015 Lead Auditor: built and conducted QMS audit frameworks adopted across multiple financial, manufacturing, retail, and enterprise organizations.
+\end{itemize}}}
+
+\vspace{3pt}
+
+\needspace{5\baselineskip}
+\item{\cventry{02/2015--01/2022}{Co-Founder \& Principal Engineer}{PyCloud Solutions}{Toronto, Canada}{}{\vspace{1pt}
+\begin{itemize}
+    \item Scaled to \$500K+ ARR delivering AWS cloud transformation programs; achieved AWS Select Tier Partner status through certifications, customer case studies, and service portfolio expansion.
+    \item Deployed AWS Control Tower multi-account landing zones and architected reusable Terraform modules for networking, IAM, and CloudWatch, cutting deployment time by 60\% across multi-region workloads.
 \end{itemize}}}
 
 \end{itemize}
 
 % ============================================================
-%     EDUCATION
+%     EDUCATION & CERTIFICATIONS
 % ============================================================
 
-\section{Education}
+\section{Education \& Certifications}
 \vspace{1pt}
 \begin{itemize}
 
-\item{\cventry{[YYYY--YYYY]}{[Degree] in [Field]}{[Institution]}{[City, Country]}{}{\vspace{1pt}
-Thesis: ``[Thesis Title].'' [Brief description of research focus.]
-}}
+\item{\cventry{}{Bachelor of Science, Computer Science}{}{}{}{}}
 
 \vspace{3pt}
 
-\item{\cventry{[YYYY--YYYY]}{[Degree] in [Field]}{[Institution]}{[City, Country]}{}{\vspace{1pt}
-[Brief description or key topics.]
-}}
+\item \textbf{AWS:} Solutions Architect $\cdot$ Developer Associate $\cdot$ AI Practitioner $\cdot$ \textbf{Azure:} AZ-900 $\cdot$ \textbf{HashiCorp:} Terraform Associate $\cdot$ \textbf{PMI:} PMP $\cdot$ CBAP $\cdot$ CSM $\cdot$ ISO 9001:2015 Lead Auditor
 
-\end{itemize}
-
-% ============================================================
-%     LANGUAGES
-% ============================================================
-
-\section{Languages}
-\vspace{1pt}
-\begin{itemize}
-\item [Language 1] (native), [Language 2] (fluent), [Language 3] (intermediate).
-\end{itemize}
-
-% ============================================================
-%     PUBLICATIONS (optional)
-% ============================================================
-
-\section{Publications}
-\vspace{1pt}
-\begin{itemize}
-\item [Author(s)] ([Year]). [Title]. [Journal/Conference]. \href{[DOI_URL]}{DOI link}
-\end{itemize}
-
-% ============================================================
-%     HONORS AND AWARDS (optional)
-% ============================================================
-
-\section{Honors and Awards}
-\vspace{1pt}
-\begin{itemize}
-\item{\textbf{[Award Name]} -- [Event/Organization] ([Year]).}
 \end{itemize}
 
 % ============================================================

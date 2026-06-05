@@ -10,30 +10,79 @@ Keep answers to 1-2 minutes. Be specific. End with what you learned or would do 
 
 ## Ready-Made STAR Examples
 
-<!-- These are populated by /setup from your actual experience. Below are templates showing the format. -->
+## STAR Candidates (Complete Manually)
 
-### 1. [PROJECT_NAME] ([SKILL_DEMONSTRATED])
-**S:** [CONTEXT - what was happening, what was the problem]
-**T:** [YOUR RESPONSIBILITY - what you specifically needed to do]
-**A:** [WHAT YOU DID - specific actions, tools, methods]
-**R:** [OUTCOME - measurable results, adoption, impact]
-**Use for:** "[QUESTION_TYPE_1]", "[QUESTION_TYPE_2]"
+These stubs were extracted from your CV and live project. Fill in the S/T/A/R details before using in interviews — the bullets below are starting points, not finished answers.
 
-### 2. [PROJECT_NAME] ([SKILL_DEMONSTRATED])
-**S:** [CONTEXT]
-**T:** [YOUR RESPONSIBILITY]
-**A:** [WHAT YOU DID]
-**R:** [OUTCOME]
-**Use for:** "[QUESTION_TYPE_1]", "[QUESTION_TYPE_2]"
+### 1. MyIQ — Production GenAI SaaS (Technical depth, builder mentality, AI engineering)
+**Source:** Live project — sole engineer
+**What happened:** Designed and shipped a full-stack serverless LLM application on AWS as the sole engineer, including AI agent pipeline, CDK IaC, CI/CD, Stripe monetization, and 118 automated tests.
+**Why it matters:** Answers "tell me about a time you built something from zero", "can you ship code or just coordinate", "describe your AI/LLM technical depth"
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action: *(Prompt engineering with CoT/structured output, FastAPI on Lambda, CDK across 4 stacks, 4-workflow GitHub Actions CI/CD, Checkov IaC scanning, Stripe webhook integration)*
+- Result: *(118 passing tests, production app live at app.bennwokoye.com, freemium monetization model running)*
 
-### 3. [PROJECT_NAME] ([SKILL_DEMONSTRATED])
-**S:** [CONTEXT]
-**T:** [YOUR RESPONSIBILITY]
-**A:** [WHAT YOU DID]
-**R:** [OUTCOME]
-**Use for:** "[QUESTION_TYPE_1]", "[QUESTION_TYPE_2]"
+---
 
-<!-- Add more STAR examples as needed. Aim for 4-6 covering different competencies. -->
+### 2. SRE Function Built from Scratch — WIS International (0-to-1 program build, reliability, ambiguity)
+**Source:** WIS International (11/2024–05/2026)
+**What happened:** No SRE function existed. Built it from zero: SEV 1–4 classification, on-call rotation structure, incident management SOPs, post-mortem process, MTTR baselines, and Datadog observability rollout.
+**Why it matters:** Answers "tell me about a time you built something with no playbook", "how do you handle ambiguity", "describe building a reliability program from zero"
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action: *(designed SEV framework, stood up Datadog dashboards and alerting, wrote incident runbooks, established on-call rotation, defined SLOs)*
+- Result: *(MTTR reduced 50%, formal incident response discipline where none existed)*
+
+---
+
+### 3. SONCAP National Digital Platform — Standards Organisation of Nigeria (Scale, systems design, stakeholder management)
+**Source:** Standards Organisation of Nigeria (2012–2021)
+**What happened:** Led end-to-end design and digitization of Nigeria's national conformity certification platform, integrated with the national trade portal. 20,000+ daily transactions across enterprise backends, regulatory databases, and government APIs.
+**Why it matters:** Answers "largest/most complex program you've owned", "working with multiple stakeholders across organizations", "national-scale technical delivery"
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action: *(architected cross-agency data exchange, document management, regulatory framework, security policy at national scale)*
+- Result: *(live platform handling 20,000+ daily transactions, integrated with trade.gov.ng)*
+
+---
+
+### 4. PyCloud Scaled to $500K+ ARR (Entrepreneurship, commercial delivery, AWS partnership)
+**Source:** PyCloud Solutions (2015–2022)
+**What happened:** Co-founded and grew a cloud transformation consultancy from zero to $500K+ ARR, achieving AWS Select Tier Partner status.
+**Why it matters:** Answers "tell me about building a business", "describe your commercial instincts", "how do you grow technical relationships into revenue"
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action: *(delivered AWS cloud transformation programs, built reusable Terraform modules, pursued AWS certifications and case studies for partner status)*
+- Result: *($500K+ ARR, AWS Select Tier Partner, 40+ enterprise users on Control Tower landing zones)*
+
+---
+
+### 5. AWS Legacy Migration at Kubra — 45% Cost Reduction (Delivery under constraints, infrastructure execution)
+**Source:** Kubra Data Transfer (01/2022–05/2023)
+**What happened:** Led AWS migration of legacy applications (EC2, RDS, S3, Lambda) under Well-Architected guidance. Simultaneously standardized Terraform modules and drove IaC configuration drift down 75%.
+**Why it matters:** Answers "tell me about delivering a complex infrastructure program on time", "cost optimization", "working with globally distributed teams"
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action: *(migration planning under Well-Architected framework, Terraform module standardization, global team coordination)*
+- Result: *(45% infrastructure cost reduction, 75% IaC drift reduction, 97% risk mitigation success rate)*
+
+---
+
+### 6. CI/CD Modernization at WIS — 60% Release Cycle Reduction (Engineering velocity, program execution)
+**Source:** WIS International (11/2024–05/2026)
+**What happened:** Existing CI/CD pipelines had branch protection gaps, flaky gates, and manual handoffs. Led modernization using GitHub Actions and GitHub Copilot AI.
+**Why it matters:** Answers "describe improving developer velocity", "tell me about a program with measurable engineering impact", "how do you drive adoption of new tooling"
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action: *(designed 4-workflow GitHub Actions pipeline architecture, implemented CDK synth/diff gating, added Snyk/SonarQube scanning, enforced branch protection, integrated Copilot AI)*
+- Result: *(release cycle time cut 60%, third-party dependency risk reduced, no disruption to engineering teams)*
 
 ## Common Tough Questions
 

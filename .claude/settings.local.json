@@ -5,7 +5,25 @@
       "Bash(python3:*)",
       "Bash(python:*)",
       "Bash(curl:*)",
-      "Bash(bun:*)"
+      "Bash(bun:*)",
+      "Bash(xargs ls -la)",
+      "WebSearch",
+      "WebFetch(domain:job-boards.greenhouse.io)",
+      "WebFetch(domain:jobs.ashbyhq.com)",
+      "WebFetch(domain:www.anthropic.com)",
+      "Bash(lualatex --version)",
+      "Bash(xelatex --version)",
+      "Bash(brew --version)",
+      "Bash(brew install *)",
+      "Bash(brew list *)",
+      "Bash(brew info *)",
+      "Bash(/Library/TeX/texbin/tlmgr update *)",
+      "Bash(gh auth *)",
+      "Bash(gh repo *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

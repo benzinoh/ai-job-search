@@ -1,10 +1,7 @@
-# Job Application Assistant for [YOUR_NAME]
-
-<!-- SETUP: This file is populated by running /setup -->
-<!-- After running /setup, all [PLACEHOLDER] tokens will be replaced with your actual information -->
+# Job Application Assistant for Benjamin Nwokoye
 
 ## Role
-This repo is a job application workspace. Claude acts as a career advisor and application assistant for [YOUR_NAME], helping with:
+This repo is a job application workspace. Claude acts as a career advisor and application assistant for Benjamin Nwokoye, helping with:
 1. **Job fit evaluation** - Assess job postings against your profile (skills, experience, behavioral traits)
 2. **CV tailoring** - Adapt existing CV templates (LaTeX/moderncv) to target specific roles
 3. **Cover letter writing** - Draft targeted cover letters using existing templates (LaTeX)
@@ -13,68 +10,94 @@ This repo is a job application workspace. Claude acts as a career advisor and ap
 
 ## Candidate Profile
 
-<!-- This section is auto-populated by /setup. You can also fill it in manually. -->
-
 ### Identity
-- **Name:** [YOUR_NAME]
-- **Location:** [YOUR_CITY], [YOUR_COUNTRY] ([YOUR_COMMUTE_CONSTRAINTS])
-- **Languages:** [YOUR_LANGUAGES]
-- **Status:** [YOUR_EMPLOYMENT_STATUS]
-- **LinkedIn headline:** "[YOUR_LINKEDIN_HEADLINE]"
+- **Name:** Benjamin Nwokoye
+- **Location:** New Jersey, USA (open to in-person, hybrid, and remote; US, Canada, and remote-first globally)
+- **LinkedIn:** https://www.linkedin.com/in/benjamin-nwokoye/
+- **GitHub:** https://github.com/benzinoh
+- **Website:** bennwokoye.com
+- **Languages:** English (native)
+- **Status:** Available — left WIS International May 2026
+- **LinkedIn headline:** "Lead AI Agent Architect · LLM Systems · Conversational AI · Enterprise Cloud · AWS Community Builder"
 
 ### Education
-<!-- List your degrees, most recent first -->
-- **[DEGREE_LEVEL] in [FIELD]** ([YEAR_START]-[YEAR_END]) - [INSTITUTION]
-  - Thesis: "[THESIS_TITLE]"
-  - Topics: [KEY_TOPICS]
+- **BSc in Computer Science** — institution not listed on CV
 
 ### Professional Experience
-<!-- List your roles, most recent first -->
-- **[JOB_TITLE]** ([START_DATE] - [END_DATE]) - **[COMPANY]** ([LOCATION])
-  - [KEY_RESPONSIBILITY_1]
-  - [KEY_RESPONSIBILITY_2]
-  - [KEY_ACHIEVEMENT]
+- **Senior Technical Program Manager (AI Platform & Cloud Infrastructure)** (11/2024 – 05/2026) - **WIS International** (Toronto, Canada)
+  - Built the SRE function from scratch: on-call rotation, SEV classification (SEV 1–4), incident management SOPs, post-mortem process; reduced MTTR by 50%
+  - Designed and deployed AI-assisted CI/CD pipelines on AWS and Azure using GitHub Actions and GitHub Copilot AI; cut release cycle time by 60%
+  - Rolled out Datadog observability across multi-cloud environments; operationalized Snyk/SonarQube vulnerability scanning inside CI/CD
+  - Directed IAM, RBAC, and SSO lifecycle governance; delivered audit readiness for SOC 2, ISO, and GDPR
+  - Delivered 40% infrastructure cost reduction through right-sizing and auto-scaling enforcement
+  - Embedded partner to the CTO: translated infrastructure complexity into executive-level decision frameworks
+
+- **Senior Project Manager (AWS Cloud Platform Programs)** (05/2023 – 11/2024) - **Caylent** (AWS Premier Tier Partner, Ontario, Canada)
+  - Primary technical advisor to enterprise customers; 98% on-time delivery and <2% budget variance across a multi-client portfolio
+  - Directed 17+ VM workload migrations, EKS implementations, and GitHub CI/CD pipeline design; cut CI/CD cycle time by 60%
+  - Established program governance, risk registers, and escalation frameworks; improved delivery quality by 67%
+
+- **IT Project Manager (Cloud Infrastructure)** (01/2022 – 05/2023) - **Kubra Data Transfer** (Mississauga, Canada)
+  - Led AWS legacy migration (EC2, RDS, S3, Lambda) under Well-Architected guidance; delivered 45% infrastructure cost reduction
+  - Drove Terraform module standardization, cutting IaC configuration drift by 75%
+  - 97% risk mitigation success rate across globally distributed teams; average 8-week delivery cycles
+
+- **Software Engineer → Principal Program Manager** (2012 – 2021) - **Standards Organisation of Nigeria (SON)** (Lagos, Nigeria)
+  - Led end-to-end digitization of the SONCAP conformity certification platform and integration with the national trade portal (trade.gov.ng); 20,000+ daily transactions
+  - Architected cross-agency data exchange systems, document management workflows, and national-scale security and digital policy frameworks
+  - ISO 9001:2015 Lead Auditor: built and conducted QMS audit frameworks across financial, manufacturing, retail and enterprise organizations
+
+- **Co-Founder & Principal Engineer** (02/2015 – 01/2022) - **PyCloud Solutions** (Toronto, Canada)
+  - Scaled to $500K+ ARR delivering AWS cloud transformation programs; achieved AWS Select Tier Partner status
+  - Deployed AWS Control Tower multi-account landing zones; architected reusable Terraform modules cutting deployment time by 60%
+
+### Live Project
+- **MyIQ** (app.bennwokoye.com) — Production GenAI SaaS on AWS, sole engineer. Full-stack serverless LLM application: FastAPI (Python 3.12) on Lambda, React 18 + TypeScript on Amplify, AWS CDK across 4 stacks, Cognito, DynamoDB, Bedrock (Claude), Stripe webhooks, Secrets Manager. 118 passing tests (pytest + moto + Vitest), 4-workflow GitHub Actions CI/CD with CDK synth/diff gating, Checkov IaC scanning. Freemium model with Stripe subscription lifecycle management.
 
 ### Technical Skills
-- **Primary:** [YOUR_PRIMARY_SKILLS]
-- **Secondary:** [YOUR_SECONDARY_SKILLS]
-- **Domain:** [YOUR_DOMAIN_EXPERTISE]
-- **Software:** [YOUR_TOOLS_AND_SOFTWARE]
+- **Primary:** AWS (Lambda, API Gateway, Cognito, DynamoDB, Amplify, Bedrock, Secrets Manager, CloudWatch, S3, EC2, EKS, RDS, Route 53), AWS CDK (TypeScript), Terraform, GitHub Actions, Python (FastAPI, Pydantic, boto3, pytest, moto), TypeScript (CDK, React 18)
+- **Secondary:** Microsoft Azure, Azure DevOps, Datadog, Snyk, SonarQube, Checkov, SQL, Bash
+- **Domain:** AI/LLM engineering, GenAI SaaS architecture, agentic pipeline design, prompt engineering (CoT, few-shot, structured output), Strands Agents, MLOps fundamentals, SRE, cloud platform programs, CI/CD modernization
+- **Software:** Jira, Confluence, Datadog, GitHub, Slack, Stripe API, AWS Control Tower, AWS Well-Architected
 
 ### Certifications
-<!-- List relevant certifications with dates -->
-- **[CERTIFICATION_NAME]** - [HOURS]h - completed [DATE]
-
-### Publications
-<!-- List peer-reviewed publications, if any -->
-- [AUTHOR_LIST] ([YEAR]). [TITLE]. [JOURNAL].
+- **AWS Solutions Architect**
+- **AWS Developer Associate**
+- **AWS AI Practitioner**
+- **Microsoft Azure (AZ-900)**
+- **HashiCorp Terraform Associate**
+- **PMP** (Project Management Professional)
+- **CBAP** (Certified Business Analyst Professional)
+- **CSM** (Certified Scrum Master)
+- **ISO 9001:2015 Lead Auditor**
 
 ### Awards
-<!-- List relevant awards, hackathons, competitions -->
-- [AWARD_NAME] - [EVENT] ([YEAR])
+- AWS Community Builder
 
 ### Behavioral Profile
-<!-- Your behavioral assessment results (PI, DISC, Myers-Briggs, or self-assessment) -->
-- **[TRAIT_1]** - [DESCRIPTION]
-- **[TRAIT_2]** - [DESCRIPTION]
-- **Strengths:** [YOUR_STRENGTHS]
-- **Growth areas:** [YOUR_GROWTH_AREAS]
-- **Thrives in:** [YOUR_IDEAL_ENVIRONMENT]
+- **Builder-Operator** — ships production code (MyIQ sole engineer) and runs enterprise delivery programs simultaneously
+- **Thrives in ambiguity** — self-described strength; builds from zero (SRE function, SONCAP, PyCloud)
+- **CTO-embedded partner** — prefers operating close to technical leadership, not above engineering orgs
+- **Strengths:** Technical credibility, stakeholder translation, eliminating blockers before they become outages, 0-to-1 program builds
+- **Growth areas:** Consumer product experience (deep cloud/AI/government background); prefers to frame as "infrastructure and reliability depth that product-first teams lack"
+- **Thrives in:** Fast-moving environments, high ambiguity, technical depth valued, proximity to engineering leadership
 
 ### What Excites You
-<!-- What motivates you professionally -->
-- [PASSION_1]
-- [PASSION_2]
+- Building production AI systems end-to-end, not just advising on them
+- Solving cloud infrastructure and reliability problems at enterprise scale
+- Translating AI/cloud complexity into business outcomes for executive stakeholders
 
 ### Target Sectors
-<!-- Industries and companies you're targeting -->
-- [SECTOR_1]: [EXAMPLE_COMPANIES]
-- [SECTOR_2]: [EXAMPLE_COMPANIES]
+- AI / Cloud companies: Anthropic, AWS, Microsoft, Google, Meta, Palantir, Databricks
+- Enterprise SaaS: Salesforce, ServiceNow, Workday, Datadog, Snowflake
+- AWS Premier/Advanced Partners: Caylent, Slalom, Accenture AWS practice
+- FinTech / RegTech: companies with complex cloud compliance requirements
 
 ### Deal-breakers
-<!-- Hard constraints on job search -->
-- [DEALBREAKER_1]
-- [DEALBREAKER_2]
+- None stated
+
+### Salary Expectations
+- $180,000 USD base minimum
 
 ## Repo Structure
 - `cv/` - LaTeX CV variants (moderncv template, banking style)

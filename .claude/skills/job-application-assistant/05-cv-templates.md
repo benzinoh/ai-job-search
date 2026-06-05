@@ -105,12 +105,17 @@ Write 5-7 lines that function as an "elevator pitch": a concise, compelling intr
 
 **Create 2-3 profile statement templates for your main role types:**
 
-<!-- SETUP: These are populated based on your background -->
-**For [YOUR_PRIMARY_ROLE_TYPE] roles:**
-> [YOUR_PROFILE_STATEMENT_TEMPLATE_1]
+**For AI Agent Architect / LLM Systems roles:**
+> AI systems builder and enterprise cloud architect with 13+ years shipping production-grade infrastructure, LLM applications, and agentic workflows at scale. Sole engineer on MyIQ, a live GenAI SaaS on AWS built with FastAPI, React, AWS CDK (4 stacks), Bedrock (Claude / Claude Code), and 118 passing tests, demonstrating full-cycle AI agent design, prompt engineering, and production deployment. Deep background in enterprise systems integration, API architecture, and cloud reliability (CI/CD, IaC, observability), combined with a track record as a trusted technical advisor to C-suite stakeholders who can translate ambiguous customer requirements into structured, production-ready AI solutions.
 
-**For [YOUR_SECONDARY_ROLE_TYPE] roles:**
-> [YOUR_PROFILE_STATEMENT_TEMPLATE_2]
+**For Senior Technical Program Manager (AI Platform / SRE) roles:**
+> Senior Technical Program Manager with 13+ years owning platform-level performance, reliability, and AI delivery programs across cloud-native SaaS environments. Built and led SRE functions including SEV classification, on-call rotations, incident response runbooks, and MTTR baselines. Deep hands-on experience integrating performance and quality gates into CI/CD pipelines (GitHub Actions, CDK synth/diff gating, Snyk, SonarQube, Checkov), deploying Datadog observability at scale, and shipping production LLM applications on AWS. Sole engineer on MyIQ, a live GenAI SaaS built with Bedrock, FastAPI, Lambda, and React covering AI inference pipeline design, guardrails, and safe rollout.
+
+**For Senior TPM (Infrastructure / Cloud Platform) roles:**
+> Senior TPM with 13+ years embedded in engineering orgs not above them. I build and operate the programs that keep infrastructure reliable, developers unblocked, and complex cross-team initiatives moving. Built the SRE function from zero at WIS International: on-call rotation, SEV classification, incident management SOPs, IaC pipelines, and observability. Delivered EKS implementations, CI/CD modernization, and multi-customer cloud platform programs with 98% on-time delivery at Caylent. Also ships production code — MyIQ is a GenAI SaaS I built solo on AWS Bedrock, Lambda, and CDK with 118 automated tests. I thrive in ambiguity, eliminate blockers before they become outages, and translate technical complexity into decisions executives can act on.
+
+**For IT Systems Engineer / Cloud & Infrastructure roles:**
+> Cloud AI engineer and technical program manager with 13+ years building and operating cloud systems, IaC pipelines, and security controls at enterprise and production scale. Designed and shipped 4-workflow GitHub Actions CI/CD pipelines, AWS CDK infrastructure across 4 stacks (Cognito, DynamoDB, Lambda, Amplify), and cross-system automation in production. Track record of transforming manual IT operations into engineering-driven systems, cutting release cycles by 60%, MTTR by 50%, and infrastructure costs by 45%.
 
 ### Core Competencies / Skills Section (Best Practice)
 Reorder and emphasize based on the role. Use bold category labels.

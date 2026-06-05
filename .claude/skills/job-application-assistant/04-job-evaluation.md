@@ -16,9 +16,9 @@ How well do the required/preferred skills align with the candidate's capabilitie
 | 40-59 | Partial match, significant upskilling needed |
 | 0-39 | Fundamental mismatch |
 
-**Strong match areas:** [YOUR_PRIMARY_SKILLS]
-**Moderate match areas:** [YOUR_SECONDARY_SKILLS]
-**Weak match areas:** [SKILLS_YOU_LACK]
+**Strong match areas:** Technical Program Management, AI/LLM engineering (AWS Bedrock/Claude), GenAI SaaS architecture, AWS cloud platform programs, CI/CD modernization (GitHub Actions, CDK), IaC (Terraform, CDK), observability (Datadog, CloudWatch), SRE program ownership, Python (FastAPI, boto3), security/compliance (SOC 2, ISO, GDPR, IAM)
+**Moderate match areas:** SRE/platform engineering as an individual contributor, TypeScript/React development, EKS/Kubernetes, Azure platform programs
+**Weak match areas:** Consumer product engineering, mobile development, data science/ML research, front-end design
 
 ### 2. Experience Match (0-100)
 Does work history align with what they're looking for?
@@ -30,9 +30,9 @@ Does work history align with what they're looking for?
 | 40-59 | Adjacent experience, would need to make the case |
 | 0-39 | Unrelated experience |
 
-**Strong:** [YOUR_DIRECT_EXPERIENCE_DOMAINS]
-**Moderate:** [YOUR_ADJACENT_EXPERIENCE]
-**Entry-level:** [ROLES_WITH_LIMITED_EXPERIENCE]
+**Strong:** AI platform program management, AWS cloud platform delivery, enterprise CI/CD modernization, SRE program ownership, multi-cloud infrastructure programs, government/national-scale platform delivery
+**Moderate:** Solo full-stack GenAI SaaS development (MyIQ), AWS partner/consulting delivery, startup engineering leadership (PyCloud)
+**Entry-level:** Consumer product, pure IC software engineering roles at FAANG scale
 
 ### 3. Behavioral/Culture Fit (0-100)
 Does the role and company culture match the behavioral profile?
@@ -63,19 +63,20 @@ Does this role advance career goals and contain tasks that energize?
 | 0-39 | Dead end or backwards step |
 
 **Career goals:**
-- [YOUR_CAREER_GOAL_1]
-- [YOUR_CAREER_GOAL_2]
-- [YOUR_CAREER_GOAL_3]
+- Senior Technical Program Manager or Staff TPM at an AI-first or cloud-native company
+- Roles where technical depth is respected and required (not just coordination)
+- Proximity to AI/LLM infrastructure, GenAI platform delivery, or agentic systems programs
+- Long-term: Principal TPM or Director of Engineering Programs at a company building AI at scale
 
 **Motivation filter:** Evaluate not just whether you *can* do the tasks, but whether the tasks will *energize* you. Consider:
-- Tasks that energize: [YOUR_ENERGIZING_TASKS]
-- Tasks that drain: [YOUR_DRAINING_TASKS]
-- Non-task factors: leadership style, department culture, company values, degree of autonomy
+- Tasks that energize: building production AI systems, solving reliability/infrastructure problems at scale, partnering directly with CTOs, 0-to-1 program builds, translating ambiguity into execution
+- Tasks that drain: high-ceremony governance with no technical depth, status-report-only coordination, being two layers removed from the actual work, environments that don't value technical credibility
+- Non-task factors: proximity to engineering leadership, culture of ownership, builder mentality valued
 
 **Life situation alignment:** Consider personal constraints:
-- **Security**: [YOUR_FINANCIAL_SITUATION_CONTEXT]
-- **Flexibility**: [YOUR_SCHEDULE_CONSTRAINTS]
-- **Professional development**: [YOUR_GROWTH_PRIORITIES]
+- **Security**: Salary minimum $180K USD base; strong equity/bonus upside valued at AI-stage companies
+- **Flexibility**: Open to in-person, hybrid, remote — NJ-based but willing to travel or relocate for the right role
+- **Professional development**: Wants to deepen AI/agentic systems knowledge; interested in companies building the AI infrastructure layer, not just applying LLMs
 
 ### 6. Salary Benchmark (Optional)
 
