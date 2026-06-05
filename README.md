@@ -1,27 +1,25 @@
 <p align="center">
-  <img src="claude_animation.gif" alt="Claude Job Search Assistant" width="200">
+  <img src="claude_animation.gif" alt="AI Job Search Assistant" width="200">
 </p>
 
-# AI Job Search — Benjamin Nwokoye
+# AI Job Search
 
-An AI-powered job application framework built on [Claude Code](https://claude.com/claude-code), customized for a senior AI/cloud engineering and TPM job search targeting US and Canadian markets.
+An AI-powered job application framework built on [Claude Code](https://claude.com/claude-code) that automates the end-to-end job search pipeline: scraping and evaluating job postings, generating tailored CVs and cover letters, and auto-submitting applications — all driven by a match score against your candidate profile.
 
-This is a fork of [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search) with the full workflow adapted for a US/Canada job market, a production LaTeX CV pipeline with verified PDF output, Playwright-based Greenhouse application automation, and a candidate profile configured for Benjamin Nwokoye.
+## What this does
 
-## What this is
-
-A structured workflow that turns Claude Code into a full-stack job application assistant. The core flow covers profile setup, job scraping, fit evaluation, LaTeX CV and cover letter generation with verified PDF compilation, and optional Playwright-driven Greenhouse form submission.
+Turns Claude Code into a full-stack job application assistant. Give it your profile once; it handles the rest.
 
 ```
 /setup          /scrape              /apply <url>
   |                |                     |
   v                v                     v
-Fill in        Search US/CA          Evaluate fit
-your profile   job portals           Score & recommend
+Fill in        Search job           Evaluate fit
+your profile   portals              Score & recommend
   |                |                     |
   v                v                     v
 Profile        Present matches      Draft CV + Cover Letter
-files ready    with fit ratings     (LaTeX, tailored)
+files ready    with fit scores      (LaTeX, tailored)
                    |                     |
                    v                     v
                Pick a match         Reviewer agent critiques
@@ -49,7 +47,7 @@ files ready    with fit ratings     (LaTeX, tailored)
 ### 1. Fork and clone
 
 ```bash
-gh repo fork MadsLorentzen/ai-job-search --clone
+gh repo fork benzinoh/ai-job-search --clone
 cd ai-job-search
 ```
 
@@ -61,7 +59,7 @@ claude
 /setup
 ```
 
-`/setup` offers three paths: read your `documents/` folder (CV PDF, LinkedIn export, diplomas, references, past applications), import a single CV pasted in chat, or walk through an interview. It auto-detects what you have and asks. Documents-folder mode is idempotent and safe to re-run as you add more material; see `documents/README.md` for the layout.
+`/setup` offers three paths: read your `documents/` folder (CV PDF, LinkedIn export, diplomas, references, past applications), import a single CV pasted in chat, or walk through a guided interview. Documents-folder mode is idempotent and safe to re-run as you add material.
 
 ### 3. Search for jobs
 
@@ -69,7 +67,7 @@ claude
 /scrape
 ```
 
-Searches multiple portals for positions matching your profile, deduplicates results, and presents them sorted by fit. US and Canada job market is the default. Pick a match to run `/apply` on it directly.
+Searches multiple portals for positions matching your profile, deduplicates results, and presents them sorted by fit score. Pick a match to run `/apply` directly.
 
 ### 4. Apply to a job
 
@@ -106,7 +104,7 @@ python3 scripts/submit_<company>.py
 
 ```
 ai-job-search/
-├── CLAUDE.md                          # Candidate profile + workflow rules (Benjamin Nwokoye)
+├── CLAUDE.md                          # Candidate profile + workflow rules
 ├── .claude/
 │   ├── commands/
 │   │   ├── apply.md                   # /apply drafter-reviewer workflow
@@ -123,44 +121,29 @@ ai-job-search/
 │   │   │   ├── 06-cover-letter-templates.md # LaTeX cover letter templates
 │   │   │   └── 07-interview-prep.md   # STAR examples + interview framework
 │   │   ├── job-scraper/
-│   │   │   └── search-queries.md      # US/Canada job portal queries (LinkedIn, Greenhouse, Lever, Ashby, WTTJ)
+│   │   │   └── search-queries.md      # Job portal queries, target roles, filters
 │   │   └── upskill/                   # /upskill skill gap analysis
 │   └── settings.local.json            # Claude Code permissions
 ├── cv/
-│   ├── main_example.tex               # moderncv banking template
-│   ├── main_anthropic.tex/.pdf        # Anthropic TPM Launches
-│   ├── main_anthropic_alignment.tex/.pdf # Anthropic TPM Alignment
-│   ├── main_anthropic_research.tex/.pdf  # Anthropic TPM Research
-│   ├── main_cerebras.tex/.pdf         # Cerebras Senior TPM
-│   └── main_reddit.tex/.pdf           # Reddit Principal TPM
+│   ├── main_example.tex               # moderncv banking template (base)
+│   └── main_<company>.tex             # Per-application tailored CV (generated)
 ├── cover_letters/
 │   ├── cover.cls                      # Custom LaTeX cover letter class (Lato/Raleway)
 │   ├── OpenFonts/                     # Lato + Raleway font files
-│   ├── cover_anthropic_tpm_launches.tex/.pdf
-│   ├── cover_anthropic_tpm_alignment.tex/.pdf
-│   ├── cover_anthropic_tpm_research.tex/.pdf
-│   ├── cover_cerebras_tpm_infra.tex/.pdf
-│   └── cover_reddit_tpm_devprod.tex/.pdf
-├── scripts/                           # Playwright Greenhouse auto-fill scripts
-│   ├── submit_anthropic.py            # Anthropic TPM Launches
-│   ├── submit_anthropic_alignment.py  # Anthropic TPM Alignment
-│   ├── submit_anthropic_research.py   # Anthropic TPM Research
-│   ├── submit_cerebras.py             # Cerebras Senior TPM
-│   └── submit_reddit.py               # Reddit Principal TPM
+│   └── cover_<company>_<role>.tex     # Per-application cover letter (generated)
+├── scripts/
+│   └── submit_<company>.py            # Playwright Greenhouse auto-fill (generated)
 ├── documents/                         # Career source materials for /setup and /expand
 │   ├── cv/                            # Master CVs (PDF variants)
 │   ├── linkedin/                      # LinkedIn profile export
 │   ├── diplomas/                      # Degree certificates
 │   ├── references/                    # Reference letters
 │   └── applications/                  # Past application records
-├── job_search_tracker.csv             # Application tracking (company, role, status, fit score, files)
+├── job_search_tracker.csv             # Application tracking (company, role, status, fit score)
 ├── salary_lookup.py                   # Salary benchmarking tool (BYO data)
-├── tools/
-│   ├── convert_salary_excel.py        # Convert salary Excel to JSON
-│   └── README_SALARY_TOOL.md          # Salary tool setup instructions
-├── job_scraper/                       # Scraper state (seen_jobs.json)
-├── upskill/                           # /upskill report output
-└── SETUP.md                           # Detailed setup guide
+└── tools/
+    ├── convert_salary_excel.py        # Convert salary Excel to JSON
+    └── README_SALARY_TOOL.md          # Salary tool setup instructions
 ```
 
 ## How `/apply` works
@@ -185,7 +168,7 @@ All claims are verified against the actual profile. No fabricated skills or expe
 - **PDF verification loop.** Compiles and visually inspects every PDF — catches orphaned job titles, cover letters spilling to page 2, and bullet font fallbacks that look fine in `.tex` but break in the rendered output.
 - **Relevance-weighted CV cutting.** When a CV overflows 2 pages, cuts by lowest score of (relevance to posting × uniqueness in document × cover letter dependency), not by recency.
 - **Drafter-reviewer separation.** A second Claude agent with fresh context researches the company and critiques the drafts. Catches missed keywords, weak framing, and generic language a single pass leaves in.
-- **Playwright submission scripts.** Per-company scripts in `scripts/` auto-fill Greenhouse forms — standard fields, file uploads, custom questions, dropdowns — and pause for human CAPTCHA + Submit. Application data is inlined in each script so all fields are pre-verified.
+- **Playwright submission scripts.** Per-company scripts in `scripts/` auto-fill Greenhouse forms — standard fields, file uploads, custom questions, dropdowns — and pause for human CAPTCHA + Submit.
 
 ## Customization
 
@@ -207,7 +190,7 @@ All claims are verified against the actual profile. No fabricated skills or expe
 /setup --section search
 ```
 
-Re-runs just the search configuration: which roles, skills, locations, and portals. Also suggests role types based on your profile.
+Re-runs just the search configuration: which roles, skills, locations, and portals.
 
 ### LaTeX templates
 
@@ -215,7 +198,7 @@ The CV uses [moderncv](https://ctan.org/pkg/moderncv) (banking style) compiled w
 
 ### Job search portals
 
-`search-queries.md` is configured for the US and Canadian job market: LinkedIn, Greenhouse, Lever, Ashby HQ, Builtin, Wellfound, and Welcome to the Jungle. The original Danish portals (Jobbank, Jobdanmark, Jobindex, Jobnet) in `.agents/skills/` are retained for reference but not used in the active search queries.
+`search-queries.md` controls which portals are searched: LinkedIn, Greenhouse, Lever, Ashby HQ, Builtin, Wellfound, and Welcome to the Jungle. Update the query categories and location/salary filters to match your market.
 
 ### Greenhouse auto-submission scripts
 
@@ -238,21 +221,9 @@ The script opens a headed browser, fills all fields, and pauses for human review
 
 `/reset` shows exactly what will be deleted and requires typing `RESET` to confirm.
 
-## Applications tracked
-
-| Date | Company | Role | Fit | Status |
-|------|---------|------|-----|--------|
-| 2026-06-04 | Anthropic | TPM Launches | 85% | Applied |
-| 2026-06-04 | Reddit | Principal TPM Developer Productivity | 82% | Applied |
-| 2026-06-04 | Anthropic | TPM Research | 78% | Applied |
-| 2026-06-04 | Anthropic | TPM Alignment | 72% | Applied |
-| 2026-06-04 | Cerebras Systems | Senior TPM AI Infrastructure | 69% | Applied |
-
-Full tracking in `job_search_tracker.csv`.
-
 ## Tips for better results
 
-**Profile depth matters.** The single biggest factor in output quality. Don't just list job titles — describe specific projects, tools, responsibilities, and measurable achievements. Skills in context ("built ML pipelines for customer churn prediction in Python") give the system far more to work with than bare keywords.
+**Profile depth matters.** The single biggest factor in output quality. Don't just list job titles — describe specific projects, tools, responsibilities, and measurable achievements. Skills in context give the system far more to work with than bare keywords.
 
 **Use the documents folder.** Dropping multiple CV variants into `documents/cv/` gives `/setup` raw material to synthesize a richer profile than a single master document. Reference letters, diplomas, and past applications add signal the system can draw on during fit evaluation and cover letter writing.
 
